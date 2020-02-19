@@ -6,7 +6,8 @@ var jwt = require('jsonwebtoken');
 const roomService = require('./src/services/roomService.js');
 
 const server = http.createServer(app);
-server.listen(4000);
+// server.listen(4000);
+Server.listen(process.env.port || 4000)
 
 const io = require('socket.io').listen(server);
 app.use(cors());
