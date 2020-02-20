@@ -16,7 +16,7 @@ module.exports = {
     },
 
     async getUserMessages(room_id) {
-        const sql = `select rm.room_id, rm.user_id, rm.message, CONCAT(usr.first_name,' ',usr.last_name) AS name 
+        const sql = `select rm.room_id, rm.user_id, rm.message, CONCAT(usr.first_name,' ',usr.last_name) AS name, usr.profile_pic_url 
         from room_messages rm, users usr WHERE rm.room_id = ${room_id} AND rm.user_id =usr.id ORDER BY rm.id asc LIMIT 30`;
         const res = await Dao.executeQuery(sql);
         return res;
