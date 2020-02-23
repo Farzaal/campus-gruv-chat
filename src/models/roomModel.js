@@ -26,5 +26,11 @@ module.exports = {
         const sql = `update users set socket_id = '${socketId}' where id=${userId}`;
         const res = await Dao.executeQuery(sql);
         return res;
+    },
+
+    async getUserSocketId(userId) {
+        const sql = `select socket_id from users where id = ${userId}`;
+        const res = await Dao.executeQuery(sql);
+        return res;
     }
 }

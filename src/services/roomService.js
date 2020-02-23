@@ -20,6 +20,11 @@ module.exports = {
     async updUserSocketId(userId, socketId) {
         const updSocketId = await roomModel.updUserSocketId(userId, socketId);
         return updSocketId;
+    },
+
+    async getUserSocketId(user_id) {
+        const usrSocketId = await roomModel.getUserSocketId(user_id);
+        return usrSocketId;
     }
 
 }
