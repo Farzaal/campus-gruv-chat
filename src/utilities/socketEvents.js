@@ -13,10 +13,15 @@ module.exports = function (io) {
             io.to(socket.id).emit('joinRoom', usrMsg);
         });
 
-        socket.on('message', async (message) => {
-            const decoded = jwt.decode(socket.handshake.query.token, { complete: true });
-            await roomService.saveRoomMessage({ room_id: socket.handshake.query.room_id, user_id: decoded.payload.uid, message: message });
-            io.to(socket.handshake.query.room_id).emit('message', message);
+        socket.on('message', async (userMessage) => {
+            try {
+                const { user_id, message } = userMessage;
+                const decoded = jwt.decode(socket.handshake.query.token, { complete: true });
+                io.to(socket.handshake.query.room_id).emit('message', [userMessage]);
+                await roomService.saveRoomMessage({ room_id: socket.handshake.query.room_id, user_id: user_id, message: message });
+            } catch(e) {
+                console.log(e);
+            }
         });
 
         socket.on('disconnect', async (reason) => {
