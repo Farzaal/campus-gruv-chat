@@ -13,11 +13,12 @@ module.exports = function (io) {
             io.to(socket.id).emit('joinRoom', usrMsg);
         });
 
-        socket.on('message', async ({ room_id, message }) => {
+        socket.on('message', async (usrMessage) => {
             try {
+                const { user_id, message, profile_pic_url, name, room_id } = usrMessage;
                 const decoded = jwt.decode(socket.handshake.query.token, { complete: true });
-                io.to(room_id).emit('message', [message]);
-                await roomService.saveRoomMessage({ room_id, user_id: decoded.payload.uid, message });
+                io.to(room_id).emit('message', [usrMessage]);
+                await roomService.saveRoomMessage({ room_id, user_id, message });
             } catch(e) {
                 console.log(e);
             }
