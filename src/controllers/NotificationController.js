@@ -12,7 +12,7 @@ module.exports = {
             socketId = userSocket[0].socket_id; 
             if(!R.isNil(global.io.sockets.sockets[socketId])) {
                 console.log(socketId, notification);
-                global.io.to(socketId).emit('notification', notification);
+                global.io.to(socketId).emit('notification', req.body);
                 message = 'Notification sent successfully';
                 statusCode = 200;
             }
