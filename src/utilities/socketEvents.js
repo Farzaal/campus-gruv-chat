@@ -5,10 +5,20 @@ module.exports = function (io) {
 
     io.on('connection', function (socket) {
 
+        socket.on('isLoggedIn', async () => {
+            try {
+                const decoded = jwt.decode(socket.handshake.query.token, { complete: true });
+                await roomService.updUserSocketId(decoded.payload.uid, socket.id);
+                io.to(socket.id).emit('isLoggedIn', true);
+            } catch(e) {
+                console.log(e);
+                io.to(socket.id).emit('isLoggedIn', false);
+            }
+        });
+
         socket.on('joinRoom', async ({ room_id }) => {
             const decoded = jwt.decode(socket.handshake.query.token, { complete: true });
             socket.join(room_id);
-            await roomService.updUserSocketId(decoded.payload.uid, socket.id);
             const usrMsg = await roomService.getUserMessages(room_id);
             io.to(socket.id).emit('joinRoom', usrMsg);
         });
