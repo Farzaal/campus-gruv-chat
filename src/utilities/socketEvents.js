@@ -10,8 +10,8 @@ module.exports = function (io) {
                 const decoded = jwt.decode(socket.handshake.query.token, { complete: true });
                 await roomService.updUserSocketId(decoded.payload.uid, socket.id);
                 io.to(socket.id).emit('isLoggedIn', true);
-            } catch(e) {
-                console.log(e);
+            } catch(exp) {
+                console.log(exp);
                 io.to(socket.id).emit('isLoggedIn', false);
             }
         });
