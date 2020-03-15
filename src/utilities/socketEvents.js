@@ -11,7 +11,6 @@ module.exports = function (io) {
             try {
                 const decoded = jwt.decode(socket.handshake.query.token, { complete: true });
                 await roomService.updUserSocketId(decoded.payload.uid, socket.id);
-                console.log(socket.id);
                 io.to(socket.id).emit('isLoggedIn', true);
             } catch(exp) {
                 console.log(exp);
@@ -39,7 +38,6 @@ module.exports = function (io) {
                     sockId = sock.socket_id;
                     io.to(socket.id).emit('message', usrMessage);
                     usrMessage.notification = `${usr.name} has messaged you`;
-                    console.log(usrMessage, sockId);
                     !R.isNil(sockId) ? io.to(sockId).emit('user_message', usrMessage) : '';
                 } else {
                     io.to(room_id).emit('message', usrMessage);
