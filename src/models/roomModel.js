@@ -32,5 +32,12 @@ module.exports = {
         const sql = `select socket_id from users where id = ${userId}`;
         const res = await Dao.executeQuery(sql);
         return res;
+    },
+
+    async roomWiseUser(room_id) {
+        const sql = `SELECT CONCAT(usr.first_name, ' ', usr.last_name) as name, usr.socket_id FROM room_detail rd, users usr WHERE rd.room_id=${room_id}
+        AND rd.user_id = usr.id`;
+        const res = await Dao.executeQuery(sql);
+        return res;
     }
 }

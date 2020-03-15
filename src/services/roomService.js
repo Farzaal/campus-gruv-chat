@@ -25,6 +25,11 @@ module.exports = {
     async getUserSocketId(user_id) {
         const usrSocketId = await roomModel.getUserSocketId(user_id);
         return usrSocketId;
+    },
+
+    async roomWiseUser(room_id) {
+        const usr = await roomModel.roomWiseUser(room_id);
+        return usr;
     }
 
 }
