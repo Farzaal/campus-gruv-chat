@@ -22,7 +22,7 @@ module.exports = function (io) {
             const decoded = jwt.decode(socket.handshake.query.token, { complete: true });
             socket.join(room_id);
             const usrMsg = await roomService.getUserMessages(room_id);
-            io.to(socket.id).emit('joinRoom', [usrMsg]);
+            io.to(socket.id).emit('joinRoom', usrMsg);
         });
 
         socket.on('message', async (usrMessage) => {
@@ -36,11 +36,11 @@ module.exports = function (io) {
                     const usr = usrSocket.find(soc => R.equals(socket.id, soc.socket_id));
                     const sock = usrSocket.find(soc => !R.equals(socket.id, soc.socket_id));
                     sockId = sock.socket_id;
-                    io.to(socket.id).emit('message', usrMessage);
+                    io.to(socket.id).emit('message', [usrMessage]);
                     usrMessage.notification = `${usr.name} has messaged you`;
-                    !R.isNil(sockId) ? io.to(sockId).emit('user_message', usrMessage) : '';
+                    !R.isNil(sockId) ? io.to(sockId).emit('user_message', [usrMessage]) : '';
                 } else {
-                    io.to(room_id).emit('message', usrMessage);
+                    io.to(room_id).emit('message', [usrMessage]);
                 }
                 await roomService.saveRoomMessage({ room_id, user_id, message });
             } catch(e) {
