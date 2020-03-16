@@ -22,7 +22,7 @@ module.exports = function (io) {
             const decoded = jwt.decode(socket.handshake.query.token, { complete: true });
             socket.join(room_id);
             const usrMsg = await roomService.getUserMessages(room_id);
-            io.to(socket.id).emit('joinRoom', usrMsg);
+            io.to(socket.id).emit('joinRoom', [usrMsg]);
         });
 
         socket.on('message', async (usrMessage) => {
