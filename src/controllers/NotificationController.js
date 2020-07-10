@@ -7,7 +7,7 @@ module.exports = {
         const { user_id, notification } = req.body;
         let message = 'User is offline', socketId = '', statusCode = 400;
         const userSocket = await roomService.getUserSocketId(user_id);
-        // if(R.gt(userSocket.length, 0)) {
+        // if(R.gt(userSocket.length, 0)) {                              
         if(userSocket[0].socket_id) {
             socketId = userSocket[0].socket_id; 
             if(!R.isNil(global.io.sockets.sockets[socketId])) {
@@ -18,6 +18,20 @@ module.exports = {
             }
         }
         return res.status(statusCode).json({ message });
+    },
+
+    async serverEvent(req, res) {
+        res.status(200).set({
+            "connection": "keep-alive",
+            "cache-control": "no-cache",
+            "content-type": "application/json"
+        });
+        const data = { message: 'Hello World' };
+
+        setInterval(() => {
+            data.timestamp = Date.now();
+            res.write(JSON.stringify(data));
+        }, 5000)
     }
     
 }
